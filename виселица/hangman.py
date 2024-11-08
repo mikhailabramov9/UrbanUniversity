@@ -1,51 +1,117 @@
-<strong><em>from </em></strong>random <strong><em>import </em></strong>shuffle
-# Кол-во попыток.
-turns = 10
+from random import choice
 
-print(f"Привет, Давай сыграем в виселицу! У тебя есть {turns} попыток!")
+HANGMAN = (
+    """
+     ------
+     |    |
+     |
+     |
+     |
+     |
+     |
+    ----------
+    """,
+    """
+     ------
+     |    |
+     |    O
+     |
+     |
+     |
+     |
+    ----------
+    """,
+    """
+     ------
+     |    |
+     |    O
+     |    |
+     | 
+     |   
+     |    
+    ----------
+    """,
+    """
+     ------
+     |    |
+     |    O
+     |   /|
+     |   
+     |   
+     |   
+    ----------
+    """,
+    """
+     ------
+     |    |
+     |    O
+     |   /|\\
+     |   
+     |   
+     |     
+    ----------
+    """,
+    """
+     ------
+     |    |
+     |    O
+     |   /|\\
+     |   /
+     |   
+     |    
+    ----------
+    """,
+    """
+     ------
+     |    |
+     |    O
+     |   /|\\
+     |   / \\
+     |   
+     |   
+    ----------
+    """
+)
 
-# Список слов, которые участвуют в игре.
-wordList = ["geekflare", "awesome", "python", "magic"]
-# Перемешиваем список.
-shuffle(wordList)
-# Берем последнее слово из списка.
-word = wordList.pop()
+max_wrong = len(HANGMAN) - 1
+WORDS = ("python", "игра", "программирование")  # Слова для угадывания
 
-guesses = ""
+word = choice(WORDS)  # Слово, которое нужно угадать
+so_far = "_" * len(word)  # Одна черточка для каждой буквы в слове, которое нужно угадать
+wrong = 0  # Количество неверных предположений, сделанных игроком
+used = []  # Буквы уже угаданы
 
-# Цикл, который будет работать, пока не останется попыток или не отгаданных букв.
-<strong><em>while </em></strong>turns > 0:
-   wrong = 0
+while wrong < max_wrong and so_far != word:
+    print(HANGMAN[wrong])  # Вывод висельника по индексу
+    print("\nВы использовали следующие буквы:\n", used)
+    print("\nНа данный момент слово выглядит так:\n", so_far)
 
-    <strong><em>for </em></strong>char <strong><em>in </em></strong>word:
-       <strong><em>if </em></strong>char <strong><em>in </em></strong>guesses:
-           print(char, end=" ")
-       <strong><em>else</em></strong>:
-           print("_", end=" ")
-           wrong += 1
+    guess = input("\n\nВведите свое предположение: ")  # Пользователь вводит предполагаемую букву
 
-   print("\n")
+    while guess in used:
+        print("Вы уже вводили букву", guess)  # Если буква уже вводилась ранее, то выводим соответствующее сообщение
+        guess = input("Введите свое предположение: ")  # Пользователь вводит предполагаемую букву
 
-   <strong><em>if </em></strong>wrong == 0:
-       print("Ты выиграл! :)")
+    used.append(guess)  # В список использованных букв добавляется введённая буква
 
-       <strong><em>break</em></strong>
+    if guess in word:  # Если введённая буква есть в загаданном слове, то выводим соответствующее сообщение
+        print("\nДа!", guess, "есть в слове!")
+        new = ""
+        for i in range(len(word)):  # В цикле добавляем найденную букву в нужное место
+            if guess == word[i]:
+                new += guess
+            else:
+                new += so_far[i]
+        so_far = new
 
-<strong><em>   </em></strong>print()
+    else:
+        print("\nИзвините, буквы \"" + guess + "\" нет в слове.")  # Если буквы нет, то выводим соответствующее сообщение
+        wrong += 1
 
-   guess = ""
-   <strong><em>if </em></strong>len(guess) < 1:
-       uess = input("Впиши букву и нажми enter: ")[0]
+if wrong == max_wrong:  # Если игрок превысил кол-во ошибок, то его повесили
+    print(HANGMAN[wrong])
+    print("\nТебя повесили!")
+else:  # Если кол-во ошибок не превышено, то игрок выиграл
+    print("\nВы угадали слово!")
 
-   <strong><em>if </em></strong>guess <strong><em>in </em></strong>guesses:
-       print("Эта буква уже была!")
-   guesses += guess
-
-   <strong><em>if </em></strong>guess <strong><em>not in </em></strong>word:
-       turns -= 1
-
-       print("Упс! Ошибка")
-       print(f"У тебя осталось {turns} попыток")
-
-       <strong><em>if </em></strong>turns == 0:
-           print("Ты проиграл! :(")
+print("\nЗагаданное слово было \"" + word + '\"')
