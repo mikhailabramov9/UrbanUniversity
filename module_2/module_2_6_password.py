@@ -11,7 +11,7 @@ for i in range(1, a):
             code.extend([i, j])
         j += 1
     i += 1
-code_int = int(''.join(map(str, code)))
+code_int = int(''.join(map(str, code))) # преобразовал в число для сверки с ответами
 print("Шифр: ", code_int)
 
 # Ответы:
