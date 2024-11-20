@@ -5,11 +5,11 @@ a = random.choice(num1)
 print("Напишите все возможные пары чисел друг за другом,")
 print("так чтобы Число: ", a, "было кратно сумме их значений.")
 code = []
-i = 1
-for i in range (1, a):
-    b = a - i
-    if a % (b + i) == 0 and i < a // 2 + 1:
-        code.extend([i, b])
+for i in range(1, a):
+    for j in range(2, a):
+        if a % (i + j) == 0 and i != j and i < a // 2 + 1:
+            code.extend([i, j])
+        j += 1
     i += 1
 
 print("Шифр: ", ' '.join(map(str, code))) # пробел для лучшего считывания пары чисел
