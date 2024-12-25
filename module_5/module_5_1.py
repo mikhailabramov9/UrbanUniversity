@@ -18,38 +18,45 @@ class House:
         return f"Название: {self.name}, кол-во этажей: {self.number_of_floors}"
 
     def __eq__(self, other):
-        isinstance(other, int)
-        return self.number_of_floors == other
+        if isinstance(other, House):
+            return self.number_of_floors == other.number_of_floors
+        elif isinstance(other, int):
+            return self.number_of_floors == other
 
 #Методы __lt__(<), __le__(<=), __gt__(>), __ge__(>=), __ne__(!=)
     def __lt__(self, other):
-        return self.number_of_floors < other.number_of_floors
+        if isinstance(other, House):
+            return self.number_of_floors < other.number_of_floors
+        elif isinstance(other, int):
+            return self.number_of_floors < other
 
     def __le__(self, other):
-        return self.number_of_floors <= other.number_of_floors
+        return self.__eq__(other) or self.__lt__(other)
 
     def __gt__(self, other):
-        return self.number_of_floors > other.number_of_floors
+        return not self.__lt__(other)
 
     def __ge__(self, other):
-        return self.number_of_floors >= other.number_of_floors
+        return self.__eq__(other) or self.__gt__(other)
 
     def __ne__(self, other):
-        return self.number_of_floors != other.number_of_floors
+        return not self.__eq__(other)
 
 #__add__(self, value) - увеличивает кол-во этажей на переданное значение value, возвращает сам объект self.
-    def __add__(self, value):
-        self.number_of_floors = self.number_of_floors + value
+    def __add__(self, other):
+        if isinstance(other, House):
+            self.number_of_floors += other.number_of_floors
+        elif isinstance(other, int):
+            self.number_of_floors += other
         return self
 
 #__radd__(self, value), __iadd__(self, value) - работают так же как и __add__ (возвращают результат его вызова).
     def __iadd__(self, value):
-        self.number_of_floors += value
+        self.number_of_floors.__add__()
         return self
     def __radd__(self, value):
-        self.number_of_floors = value + self.number_of_floors
+        self.number_of_floors.__add__()
         return self
-
 
 
 
